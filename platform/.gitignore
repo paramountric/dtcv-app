@@ -1,0 +1,74 @@
+volumes/db/data
+volumes/storage
+volumes/redis-data
+volumes/dtcc/data
+volumes/n8n
+.env
+test.http
+docker-compose.override.yml
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+bin/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+.Python
+*.manifest
+*.spec
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv
+env.bak/
+venv.bak/
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Python Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# FastAPI
+*.log
+*.pid
+*.sqlite3
+*.db
+*.db-journal
+*.dat
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.db-shm
+*.db-wal
+
+
+
