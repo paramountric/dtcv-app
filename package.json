@@ -1,6 +1,7 @@
 {
-  "name": "dtcv",
+  "name": "create-dtcv-app",
   "version": "0.1.0",
+  "description": "DTCV App Template",
   "private": true,
   "scripts": {
     "dev": "next dev",
