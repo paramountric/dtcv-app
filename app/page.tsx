@@ -3,14 +3,15 @@
 import { Suspense } from 'react';
 import { useAppContext } from '../context/app-context';
 import { Canvas } from './_components/canvas';
-import LoginForm from './_components/login-form';
+import LoginForm from './login/_components/login-form';
 import Spinner from '@/components/ui/spinner';
 import Viewport from './_components/viewport';
 
 export default function Start() {
+  // Note: we are using middleware in this case so this conditional UI will not be used
+  // The user will be logged in if ending up here
+  // This is here for reference
   const { user } = useAppContext();
-
-  console.log('user', user);
 
   return (
     <>
@@ -33,7 +34,9 @@ export default function Start() {
           </div>
         )}
       </Suspense>
-      <div className="relative h-screen overflow-hidden">{/* <Canvas /> */}</div>
+      <div className="relative h-screen overflow-hidden">
+        <Canvas />
+      </div>
     </>
   );
 }

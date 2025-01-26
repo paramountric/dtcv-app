@@ -12,6 +12,8 @@ import {
   dbUserToUserWithProfile,
 } from '@/model';
 import { Feature } from '@/viewport';
+import { InteractionProvider } from '@/context/interaction-context';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -43,74 +45,38 @@ export default async function RootLayout({
 
   let message: string | null = null;
 
-  const {
-    data: { user },
-  } = await client.auth.getUser();
+  try {
+    const {
+      data: { user },
+    } = await client.auth.getUser().catch((error) => {
+      console.error('Error fetching user:', error);
+      return { data: { user: null } };
+    });
 
-  if (user) {
-    const { data: profileData, error: profileError } = await client
-      .from('users')
-      .select('*')
-      .eq('id', user.id)
-      .single();
-
-    if (profileError || !profileData) {
-      console.error('Error fetching profile', profileError);
+    if (user) {
+      const { data: speckleUser, error: speckleUserError } = await client
+        .from('users')
+        .select('*')
+        .eq('suuid', user.id)
+        .single();
+      if (speckleUserError || !speckleUser) {
+        console.error('Error fetching speckle user', speckleUserError);
+      }
+      const profile = speckleUser || {
+        id: user.id,
+        display_name: user.email || null,
+        email: user.email!,
+        image_url: null,
+      };
+      userWithProfile = dbUserToUserWithProfile(
+        user as unknown as DbUser,
+        profile as unknown as DbProfile
+      );
+    } else {
+      message = 'User not found';
     }
-
-    const profile = profileData || {
-      id: user.id,
-      display_name: user.email || null,
-      email: user.email!,
-      image_url: null,
-    };
-
-    userWithProfile = dbUserToUserWithProfile(
-      user as unknown as DbUser,
-      profile as unknown as DbProfile
-    );
-
-    // const { data: userProjectsData, error: userProjectsError } = await client
-    //   .from('project_collaborators')
-    //   .select('project_id')
-    //   .eq('user_id', user.id);
-
-    // if (userProjectsError) {
-    //   console.error('Error fetching user projects', userProjectsError);
-    // }
-
-    // const projectIds = userProjectsData?.map((up) => up.project_id) || [];
-
-    // const { data: projectsData, error: projectsError } = await client
-    //   .from('projects')
-    //   .select('*')
-    //   .in('id', projectIds);
-
-    // if (projectsError) {
-    //   console.error('Error fetching projects', projectsError);
-    // }
-
-    // const projects: Project[] = (projectsData || []).map(dbProjectToProject);
-
-    // if (userWithProfile && userWithProfile.profile.activeProjectId) {
-    //   project =
-    //     projects.find((project) => project.id === userWithProfile!.profile.activeProjectId) || null;
-
-    //   const { data: featuresData, error: featuresError } = await client
-    //     .from('features')
-    //     .select('*')
-    //     .eq('project_id', project?.id ?? '');
-
-    //   if (featuresError) {
-    //     message = 'Error fetching features';
-    //   }
-
-    //   features = (featuresData || []).map(dbFeatureToFeature);
-    // } else {
-    //   message = 'Profile not found';
-    // }
-  } else {
-    message = 'User not found';
+  } catch (error) {
+    // console.error('Root layout error:', error);
   }
 
   return (
@@ -124,7 +90,9 @@ export default async function RootLayout({
           projects={projects}
           features={features}
         >
-          {children}
+          <InteractionProvider>
+            <TooltipProvider delayDuration={200}>{children}</TooltipProvider>
+          </InteractionProvider>
         </AppProvider>
       </body>
     </html>

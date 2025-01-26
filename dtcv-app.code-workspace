@@ -4,9 +4,6 @@
       "path": "."
     },
     {
-      "path": "../cli"
-    },
-    {
       "path": "../dtcv-docs"
     },
     {

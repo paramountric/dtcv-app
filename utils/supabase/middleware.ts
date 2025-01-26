@@ -27,31 +27,30 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  // IMPORTANT: Avoid writing any logic between createServerClient and
+  // Do not run code between createServerClient and
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
 
-  // const {
-  //   data: { user },
-  // } = await supabase.auth.getUser();
+  // IMPORTANT: DO NOT REMOVE auth.getUser()
 
-  // const toToProject = ["/login", "/auth", "/", "/signup"];
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  // if (
-  //   user &&
-  //   toToProject.some(
-  //     (path) =>
-  //       request.nextUrl.pathname.startsWith(path) ||
-  //       request.nextUrl.pathname === path
-  //   )
-  // ) {
-  //   const url = request.nextUrl.clone();
-  //   url.pathname = "/projects";
-  //   return NextResponse.redirect(url);
-  // }
+  if (
+    !user &&
+    !request.nextUrl.pathname.startsWith('/login') &&
+    !request.nextUrl.pathname.startsWith('/signup') &&
+    !request.nextUrl.pathname.startsWith('/auth')
+  ) {
+    // no user, potentially respond by redirecting the user to the login page
+    const url = request.nextUrl.clone();
+    url.pathname = '/login';
+    return NextResponse.redirect(url);
+  }
 
-  // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
-  // creating a new response object with NextResponse.next() make sure to:
+  // IMPORTANT: You *must* return the supabaseResponse object as it is.
+  // If you're creating a new response object with NextResponse.next() make sure to:
   // 1. Pass the request in it, like so:
   //    const myNewResponse = NextResponse.next({ request })
   // 2. Copy over the cookies, like so:
