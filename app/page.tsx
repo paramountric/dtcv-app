@@ -33,9 +33,7 @@ export default function Start() {
           </div>
         )}
       </Suspense>
-      <div className="relative h-screen overflow-hidden">
-        <Canvas />
-      </div>
+      <div className="relative h-screen overflow-hidden">{/* <Canvas /> */}</div>
     </>
   );
 }

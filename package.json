@@ -3,12 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "platform:start": "docker compose -f ./platform/docker-compose.common.yaml -f ./platform/docker-compose.supabase.yaml -f ./platform/docker-compose.s3.yaml -f ./platform/docker-compose.speckle.yaml -f ./platform/docker-compose.n8n.yaml -f ./platform/docker-compose.dtcc-core.yaml up -d",
-    "platform:stop": "docker compose -f ./platform/docker-compose.common.yaml -f ./platform/docker-compose.supabase.yaml -f ./platform/docker-compose.s3.yaml -f ./platform/docker-compose.speckle.yaml -f ./platform/docker-compose.n8n.yaml -f ./platform/docker-compose.dtcc-core.yaml down"
+    "gen:types": "supabase gen types typescript --local --schema public,n8n,auth | sed 's/export interface Database {/export type Database = {/' > model/generated/db.ts",
+    "platform:start": "pnpm supabase:start && echo 'Waiting for Supabase...' && sleep 3 && pnpm services:start && next dev",
+    "platform:stop": "pnpm services:stop && pnpm supabase:stop",
+    "services:start": "docker compose -f platform/docker-compose.yaml --env-file platform/.env up -d",
+    "services:stop": "docker compose -f platform/docker-compose.yaml down",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "platform:start:local": "pnpm supabase:start && echo 'Waiting for Supabase...' && sleep 3 && pnpm platform:start"
   },
   "dependencies": {
     "@deck.gl-community/editable-layers": "^9.0.3",
@@ -44,8 +50,10 @@
     "@supabase/supabase-js": "^2.45.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "dotenv": "^16.4.7",
     "geojson": "^0.5.0",
     "gl-matrix": "^3.0.0",
+    "kysely": "^0.27.5",
     "lucide-react": "^0.454.0",
     "next": "15.1.6",
     "next-themes": "^0.3.0",
@@ -53,16 +61,22 @@
     "react-dom": "^19.0.0",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.5.4",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@kristiandupont/recase": "^1.4.0",
     "@types/geojson": "^7946.0.16",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "kanel": "^3.11.0",
+    "kanel-kysely": "^0.6.0",
+    "kanel-zod": "^1.4.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "dotenv-cli": "^7.4.1"
   },
   "packageManager": "pnpm@9.4.0"
 }

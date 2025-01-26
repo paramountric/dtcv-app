@@ -58,7 +58,3 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-
-networks:
-  default:
-    name: dtcv_network

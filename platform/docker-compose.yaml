@@ -1,0 +1,83 @@
+name: dtcv-app
+
+services:
+  redis:
+    extends:
+      file: ./docker-compose.common.yaml
+      service: redis
+    networks:
+      - supabase_network_dtcv-app
+
+  minio:
+    extends:
+      file: ./docker-compose.s3.yaml
+      service: minio
+    networks:
+      - supabase_network_dtcv-app
+
+  minio-createbucket:
+    extends:
+      file: ./docker-compose.s3.yaml
+      service: minio-createbucket
+    networks:
+      - supabase_network_dtcv-app
+
+  speckle-ingress:
+    extends:
+      file: ./docker-compose.speckle.yaml
+      service: speckle-ingress
+    networks:
+      - supabase_network_dtcv-app
+
+  speckle-frontend-2:
+    extends:
+      file: ./docker-compose.speckle.yaml
+      service: speckle-frontend-2
+    networks:
+      - supabase_network_dtcv-app
+
+  speckle-server:
+    extends:
+      file: ./docker-compose.speckle.yaml
+      service: speckle-server
+    networks:
+      - supabase_network_dtcv-app
+
+  preview-service:
+    extends:
+      file: ./docker-compose.speckle.yaml
+      service: preview-service
+    networks:
+      - supabase_network_dtcv-app
+
+  webhook-service:
+    extends:
+      file: ./docker-compose.speckle.yaml
+      service: webhook-service
+    networks:
+      - supabase_network_dtcv-app
+
+  fileimport-service:
+    extends:
+      file: ./docker-compose.speckle.yaml
+      service: fileimport-service
+    networks:
+      - supabase_network_dtcv-app
+
+  n8n:
+    extends:
+      file: ./docker-compose.n8n.yaml
+      service: n8n
+    networks:
+      - supabase_network_dtcv-app
+
+  dtcc-core:
+    extends:
+      file: ./docker-compose.dtcc-core.yaml
+      service: dtcc-core
+    networks:
+      - supabase_network_dtcv-app
+
+networks:
+  supabase_network_dtcv-app:
+    external: true

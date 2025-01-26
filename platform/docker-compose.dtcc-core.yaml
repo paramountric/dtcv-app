@@ -37,7 +37,3 @@ services:
         condition: service_healthy
       minio:
         condition: service_healthy
-
-networks:
-  default:
-    name: dtcv_network

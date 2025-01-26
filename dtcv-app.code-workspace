@@ -1,8 +1,17 @@
 {
   "folders": [
-	{
-		"path": "."
-	}
-],
+    {
+      "path": "."
+    },
+    {
+      "path": "../cli"
+    },
+    {
+      "path": "../dtcv-docs"
+    },
+    {
+      "path": "../digitaltwincityviewer"
+    }
+  ],
   "settings": {}
 }
