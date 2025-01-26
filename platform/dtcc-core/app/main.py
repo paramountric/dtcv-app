@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 import os
 
 from app.config.settings import DATA_DIR
-from app.api.routes import build_router, health_router
+from app.api.routes import build_router, health_router, download_router
 
 app = FastAPI(
     title="DTCC Core Service",
@@ -28,3 +28,4 @@ app.add_middleware(
 # Include routers with prefixes
 app.include_router(build_router, prefix="/build")
 app.include_router(health_router, prefix="/health")
+app.include_router(download_router, prefix="/download")
