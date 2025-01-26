@@ -46,7 +46,7 @@ npx create-next-app@latest -e https://github.com/paramountric/dtcv-app
 2. Or clone the repository directly:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/paramountric/dtcv-app
 cd dtcv-app
 pnpm install
 ```
